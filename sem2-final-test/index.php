@@ -31,7 +31,7 @@
             <div class="col-md-12">
                 <div class="page-header clearfix">
                     <h2 class="pull-left">List Of Contacts</h2>
-                    <a href="create.php" class="btn btn-success pull-right">Add New Contact</a>
+                    <a href="add_contact.php" class="btn btn-success pull-right">Add New Contact</a>
                 </div>
                 <?php
                 // Include config file

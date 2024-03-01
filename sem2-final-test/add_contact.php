@@ -1,3 +1,54 @@
+<?php
+
+require_once 'config.php';
+
+$name = $phone = "";
+$name_err = $phone_err = "";
+
+if($_SERVER["REQUEST_METHOD"] == "POST"){
+
+    $input_name = trim($_POST["Name"]);
+    if(empty($input_name)){
+        $name_err = "Please enter a name.";
+    } elseif(!filter_var(trim($_POST["Name"]), FILTER_VALIDATE_REGEXP, array("options"=>array("regexp"=>"/^[a-zA-Z'-.\s ]+$/")))){
+        $name_err = 'Please enter a valid name.';
+    } else{
+        $name = $input_name;
+    }
+
+    $input_phone = trim($_POST["Phone Number"]);
+    if(empty($input_phone)){
+        $phone_err = "Please enter student's phone number.";
+    } elseif(!ctype_digit($input_phone)) {
+        $phone_err = "Please enter correct phone number format.";
+    } else{
+        $phone = $input_phone;
+    }
+
+    if(empty($name_err) && empty($phone_err)){
+        $sql = "INSERT INTO students (name, phone) VALUES (?, ?)";
+
+        if($stmt = mysqli_prepare($link, $sql)){
+            mysqli_stmt_bind_param($stmt, "sss", $param_name, $param_phone);
+
+            $param_name = $name;
+            $param_phone = $phone;
+
+            if(mysqli_stmt_execute($stmt)){
+                header("location: index.php");
+                exit();
+            } else{
+                echo "Something went wrong. Please try again later.";
+            }
+        }
+
+        mysqli_stmt_close($stmt);
+    }
+
+    mysqli_close($link);
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

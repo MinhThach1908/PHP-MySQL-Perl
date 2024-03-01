@@ -63,8 +63,8 @@ if(isset($_POST["ID"]) && !empty($_POST["ID"])){
                 if(mysqli_num_rows($result) == 1){
                     $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
 
-                    $name = $row["name"];
-                    $phone = $row["phone"];
+                    $name = $row["Name"];
+                    $phone = $row["Phone"];
                 } else{
                     header("location: error.php");
                     exit();
