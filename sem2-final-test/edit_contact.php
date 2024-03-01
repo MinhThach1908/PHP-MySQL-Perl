@@ -1,84 +1,90 @@
 <?php
-
+//Include config file
 require_once 'config.php';
 
-$name = $phone = "";
+//Define variables and initialize with empty values
+$name  = $phone = "";
 $name_err = $phone_err = "";
 
-if(isset($_POST["ID"]) && !empty($_POST["ID"])){
-    $id = $_POST["ID"];
+//Processing form data when form is submitted
+if(isset($_POST["id"]) && !empty($_POST["id"])) {
+//Get hidden input value
+    $id = $_POST["id"];
+}
 
-    $input_name = trim($_POST["Name"]);
-    if(empty($input_name)){
-        $name_err = "Please enter a name.";
-    } elseif(!filter_var(trim($_POST["Name"]), FILTER_VALIDATE_REGEXP, array("options"=>array("regexp"=>"/^[a-zA-Z'-.\s ]+$/")))){
-        $name_err = 'Please enter a valid name.';
-    } else{
-        $name = $input_name;
-    }
+$input_name = trim($_POST["name"]);
+if(empty($input_name)){
+    $name_err = "Please change the current name.";
+} elseif(!filter_var(trim($_POST["name"]), FILTER_VALIDATE_REGEXP, array("options"=>array("regexp"=>"/^[a-zA-Z'-.\s ]+$/")))){
+    $name_err = 'Please enter a valid name.';
+} else{
+    $name = $input_name;
+}
 
-    $input_phone = trim($_POST["Phone Number"]);
-    if(empty($input_phone)){
-        $phone_err = "Please enter student's phone number.";
-    } elseif(!ctype_digit($input_phone)) {
-        $phone_err = "Please enter correct phone number format.";
-    } else{
-        $phone = $input_phone;
-    }
+$input_phone = trim($_POST["phone"]);
+if(empty($input_phone)){
+    $phone_err = "Please change the current phone number.";
 
-    if(empty($name_err) && empty($phone_err)){
-        $sql = "UPDATE contacts SET name=?, phone=? WHERE id=?";
+}elseif (!ctype_digit($input_phone)){
+    $phone_err = 'Please enter a positive integer value. ';
+}else{
+    $phone = $input_phone;
+}
 
-        if($stmt = mysqli_prepare($link, $sql)){
-            mysqli_stmt_bind_param($stmt, "sss", $param_name, $param_phone);
 
-            $param_name = $name;
-            $param_phone = $phone;
+if(empty($name_err) && empty($phone_err)){
+    $sql = "UPDATE contacts SET name=?, phone=? WHERE id=?";
 
-            if(mysqli_stmt_execute($stmt)){
-                header("location: index.php");
-                exit();
-            } else{
-                echo "Something went wrong. Please try again later.";
-            }
+    if($stmt = mysqli_prepare($link, $sql)){
+        mysqli_stmt_bind_param($stmt, "sssi", $param_name, $param_phone, $param_id);
+
+        $param_name = $name;
+        $param_phone = $phone;
+        $param_id = $id;
+
+        if(mysqli_stmt_execute($stmt)){
+            header("location: index.php");
+            exit();
+        }else{
+            echo "Something went wrong. Please try again later.";
         }
 
+        //Close statement
         mysqli_stmt_close($stmt);
     }
 
+//Close connection
     mysqli_close($link);
-} else{
-    if(isset($_GET["ID"]) && !empty(trim($_GET["ID"]))){
-        $id = trim($_GET["ID"]);
+}else{
 
-        $sql = "SELECT * FROM students WHERE id = ?";
+    if(isset($_GET["id"]) && !empty(trim($_GET["id"]))){
+        $id = trim($_GET["id"]);
+
+        $sql = "SELECT * FROM contacts WHERE id = ?";
         if($stmt = mysqli_prepare($link, $sql)){
             mysqli_stmt_bind_param($stmt, "i", $param_id);
 
             $param_id = $id;
-
             if(mysqli_stmt_execute($stmt)){
                 $result = mysqli_stmt_get_result($stmt);
-
-                if(mysqli_num_rows($result) == 1){
+                if (mysqli_num_rows($result) == 1) {
                     $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-
                     $name = $row["Name"];
-                    $phone = $row["Phone"];
-                } else{
+                    $phone = $row["Phone Number"];
+                }else{
                     header("location: error.php");
                     exit();
                 }
-
-            } else{
+            }else{
                 echo "Oops! Something went wrong. Please try again later.";
             }
         }
-
+        //Close statement
         mysqli_stmt_close($stmt);
 
+        //Close connection
         mysqli_close($link);
-    } else{
+    }else{
         header("location: error.php");
         exit();
     }
