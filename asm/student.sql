@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS `students` (
 
 INSERT INTO `students` (`id`, `name`, `email`, `status`, `phone`) VALUES
 (801, 'Nguyen Van A', 'nguyenvana@gmail.com', 'Active', '09874237'),
-(802, 'Pham Van B', 'phamvanb@gmail.com', 'Inactive', '09273819'),
+(802, 'Pham Van B', 'phamvanb@gmail.com', 'Learning', '09273819'),
 (803, 'Tran Van C', 'tranvanc@gmail.com', 'Inactive', '04217845'),
 (804, 'Le Van D', 'levand@gmail.com', 'Blacklisted', '09812394'),
 (805, 'Hoang Van E', 'hoangvane@gmail.com', 'Active', '08721391');

@@ -4,5 +4,6 @@
     <file url="file://$PROJECT_DIR$/asm/student.sql" dialect="MariaDB" />
     <file url="file://$PROJECT_DIR$/chapter03/books.sql" dialect="MariaDB" />
     <file url="file://$PROJECT_DIR$/chapter04/employee.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/sem2-final-test/contacts_table.sql" dialect="GenericSQL" />
   </component>
 </project>
